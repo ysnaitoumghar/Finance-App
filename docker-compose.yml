@@ -12,6 +12,12 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./finance-app-backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - finance-network
 
@@ -24,7 +30,8 @@ services:
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: ThePassword
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - finance-network
 
