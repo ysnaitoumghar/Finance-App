@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: finance_app
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: ThePassword
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - finance-network
+
+  backend:
+    build: ./finance-app-backend
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/finance_app
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: ThePassword
+    depends_on:
+      - mysql
+    networks:
+      - finance-network
+
+  frontend:
+    build: ./finance-app-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - finance-network
+
+volumes:
+  mysql_data:
+
+networks:
+  finance-network:
+    driver: bridge
