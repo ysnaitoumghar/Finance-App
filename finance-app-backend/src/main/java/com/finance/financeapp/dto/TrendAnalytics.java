@@ -9,9 +9,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnalyticsResponse {
+public class TrendAnalytics {
+    private String month;
     private BigDecimal income;
     private BigDecimal expenses;
-    private BigDecimal savings;
-    private BigDecimal budgetRemaining;
 }

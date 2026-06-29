@@ -6,7 +6,9 @@ import Navbar from './components/navbar/Navbar';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/auth/PrivateRoute';
-import Dashboard from './components/dashboard/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
+import AnalyticsDashboard from './pages/Analytics/AnalyticsDashboard';
+import ReportsPage from './pages/Reports/ReportsPage';
 import BudgetPage from './components/budget/BudgetPage';
 import GroupsPage from './components/groups/GroupsPage';
 
@@ -50,6 +52,22 @@ function App() {
           element={
             <PrivateRoute>
               <GroupsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/analytics"
+          element={
+            <PrivateRoute>
+              <AnalyticsDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/reports"
+          element={
+            <PrivateRoute>
+              <ReportsPage />
             </PrivateRoute>
           }
         />

@@ -18,10 +18,10 @@ export const login = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await authService.login(credentials);
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('userId', response.userId);
-      localStorage.setItem('username', response.username);
-      return response;
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('username', response.data.username);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || { message: 'Login failed' });
     }
