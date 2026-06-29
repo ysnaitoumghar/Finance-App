@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/income")
+@RequestMapping("/income")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "${app.cors.allowedOrigins}")
 public class IncomeController {

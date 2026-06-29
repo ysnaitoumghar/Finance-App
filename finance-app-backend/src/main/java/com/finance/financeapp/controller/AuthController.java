@@ -17,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "${app.cors.allowedOrigins}")
 public class AuthController {
@@ -27,12 +27,14 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest) {
+        System.out.println("Registration request received: " + signupRequest);
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(signupRequest.getPassword());
 
-        userService.registerUser(user);
+        User registeredUser = userService.registerUser(user);
+        System.out.println("User registered successfully: " + registeredUser.getUsername());
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }

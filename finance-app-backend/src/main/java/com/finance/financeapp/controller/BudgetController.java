@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/budgets")
+@RequestMapping("/budgets")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "${app.cors.allowedOrigins}")
 public class BudgetController {

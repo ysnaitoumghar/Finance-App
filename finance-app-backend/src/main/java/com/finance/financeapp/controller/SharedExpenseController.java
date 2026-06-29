@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/shared-expenses")
+@RequestMapping("/shared-expenses")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "${app.cors.allowedOrigins}")
 public class SharedExpenseController {

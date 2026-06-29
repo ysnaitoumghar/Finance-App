@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/expenses")
+@RequestMapping("/expenses")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "${app.cors.allowedOrigins}")
 public class ExpenseController {
