@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Card, CardContent, LinearProgress, useTheme } from '@mui/material';
-import { formatCurrency, formatPercentage } from '../../utils/currencyFormatter';
+import { formatCurrency } from '../../utils/currencyFormatter';
+import { formatPercentage } from '../../utils/chartHelpers';
 
 const BudgetChart = ({ data }) => {
   const theme = useTheme();

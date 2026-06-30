@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
-import { Box, Button, CircularProgress, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, useTheme, alpha } from '@mui/material';
 import { PictureAsPdf, TableChart } from '@mui/icons-material';
 import { exportToPDF, exportToCSV } from '../../services/exportService';
 import { prepareSummaryCSV } from '../../services/exportService';
 import { format } from 'date-fns';
+import { useToast } from '../common/Toast';
 
 const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
   const theme = useTheme();
+  const { success, error } = useToast();
   const [exporting, setExporting] = useState(null);
 
   const handlePDFExport = async () => {
-    if (!reportRef) return;
+    if (!reportRef) {
+      error('Report preview not available');
+      return;
+    }
     
     setExporting('pdf');
     try {
       const filename = `finance-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`;
       const success = await exportToPDF(reportRef.current, filename);
       if (success) {
-        alert('PDF exported successfully!');
+        success('PDF exported successfully!');
       } else {
-        alert('Failed to export PDF');
+        error('Failed to export PDF');
       }
-    } catch (error) {
-      console.error('PDF export error:', error);
-      alert('Failed to export PDF');
+    } catch (err) {
+      console.error('PDF export error:', err);
+      error('Failed to export PDF: ' + (err.message || 'Unknown error'));
     } finally {
       setExporting(null);
     }
@@ -40,13 +45,13 @@ const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
       const success = exportToCSV(csvData, filename);
       
       if (success) {
-        alert('CSV exported successfully!');
+        success('CSV exported successfully!');
       } else {
-        alert('Failed to export CSV');
+        error('Failed to export CSV');
       }
-    } catch (error) {
-      console.error('CSV export error:', error);
-      alert('Failed to export CSV');
+    } catch (err) {
+      console.error('CSV export error:', err);
+      error('Failed to export CSV: ' + (err.message || 'Unknown error'));
     } finally {
       setExporting(null);
     }
@@ -55,37 +60,41 @@ const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
   return (
     <Box display="flex" gap={2}>
       <Button
-        variant="outlined"
-        startIcon={exporting === 'pdf' ? <CircularProgress size={20} /> : <PictureAsPdf />}
+        variant="contained"
+        startIcon={exporting === 'pdf' ? <CircularProgress size={20} color="inherit" /> : <PictureAsPdf />}
         onClick={handlePDFExport}
         disabled={exporting !== null}
         sx={{
-          borderColor: theme.palette.error.main,
-          color: theme.palette.error.main,
+          bgcolor: theme.palette.error.main,
+          color: 'white',
           '&:hover': {
-            borderColor: theme.palette.error.dark,
-            bgcolor: `${theme.palette.error.main}10`
+            bgcolor: theme.palette.error.dark,
+          },
+          '&:disabled': {
+            bgcolor: alpha(theme.palette.error.main, 0.5),
           }
         }}
       >
-        Export PDF
+        {exporting === 'pdf' ? 'Exporting...' : 'Export PDF'}
       </Button>
       
       <Button
-        variant="outlined"
-        startIcon={exporting === 'csv' ? <CircularProgress size={20} /> : <TableChart />}
+        variant="contained"
+        startIcon={exporting === 'csv' ? <CircularProgress size={20} color="inherit" /> : <TableChart />}
         onClick={handleCSVExport}
         disabled={exporting !== null}
         sx={{
-          borderColor: theme.palette.success.main,
-          color: theme.palette.success.main,
+          bgcolor: theme.palette.success.main,
+          color: 'white',
           '&:hover': {
-            borderColor: theme.palette.success.dark,
-            bgcolor: `${theme.palette.success.main}10`
+            bgcolor: theme.palette.success.dark,
+          },
+          '&:disabled': {
+            bgcolor: alpha(theme.palette.success.main, 0.5),
           }
         }}
       >
-        Export CSV
+        {exporting === 'csv' ? 'Exporting...' : 'Export CSV'}
       </Button>
     </Box>
   );

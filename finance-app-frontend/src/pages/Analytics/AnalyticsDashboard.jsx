@@ -1,43 +1,69 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Grid, Typography, CircularProgress, Alert, Tabs, Tab } from '@mui/material';
+import { Box, Container, Grid, Typography, Alert, Tabs, Tab, Paper } from '@mui/material';
 import { fetchAllAnalytics, setDateRange } from '../../redux/slices/analyticsSlice';
-import SummaryCards from '../../components/Analytics/SummaryCards';
-import DateRangeFilter from '../../components/Analytics/DateRangeFilter';
+import { useToast } from '../../components/common/Toast';
+import SummaryCards from '../../components/analytics/SummaryCards';
+import DateRangeFilter from '../../components/analytics/DateRangeFilter';
 import ExpenseChart from '../../components/Charts/ExpenseChart';
 import TrendChart from '../../components/Charts/TrendChart';
 import IncomeVsExpense from '../../components/Charts/IncomeVsExpense';
 import BudgetChart from '../../components/Charts/BudgetChart';
+import { SummaryCardSkeleton, ChartSkeleton } from '../../components/common/SkeletonLoader';
+import EmptyState from '../../components/common/EmptyState';
 import { getDateRanges, formatDate } from '../../utils/dateHelpers';
+import { TrendingUp as TrendingUpIcon } from '@mui/icons-material';
 
 const AnalyticsDashboard = () => {
   const dispatch = useDispatch();
-  const { analyticsData, loading, error, selectedDateRange } = useSelector((state) => state.analytics);
+  const { success, error } = useToast();
+  const { analyticsData, loading, error: analyticsError, selectedDateRange } = useSelector((state) => state.analytics);
   const [tabValue, setTabValue] = React.useState(0);
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
+    if (!userId) {
+      error('Please login to view analytics');
+      return;
+    }
+
     const defaultRange = getDateRanges().thisMonth;
     dispatch(setDateRange({
       startDate: formatDate(defaultRange.start),
       endDate: formatDate(defaultRange.end),
       label: defaultRange.label
     }));
+    
     dispatch(fetchAllAnalytics({
       userId,
       startDate: formatDate(defaultRange.start),
       endDate: formatDate(defaultRange.end)
-    }));
-  }, [dispatch]);
+    }))
+      .unwrap()
+      .then(() => {
+        success('Analytics data loaded successfully');
+      })
+      .catch((err) => {
+        error('Failed to load analytics data');
+      });
+  }, [dispatch, success, error]);
 
   const handleDateRangeChange = (range) => {
     const userId = localStorage.getItem('userId');
     dispatch(setDateRange(range));
+    
     dispatch(fetchAllAnalytics({
       userId,
       startDate: range.startDate,
       endDate: range.endDate
-    }));
+    }))
+      .unwrap()
+      .then(() => {
+        success('Analytics updated for selected date range');
+      })
+      .catch((err) => {
+        error('Failed to update analytics');
+      });
   };
 
   const handleTabChange = (event, newValue) => {
@@ -46,9 +72,58 @@ const AnalyticsDashboard = () => {
 
   if (loading && !analyticsData.summary) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-        <CircularProgress />
-      </Box>
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight="bold" sx={{ mb: 4 }}>
+          Financial Analytics
+        </Typography>
+        <Grid container spacing={3}>
+          {[...Array(4)].map((_, i) => (
+            <Grid item xs={12} sm={6} md={3} key={i}>
+              <SummaryCardSkeleton />
+            </Grid>
+          ))}
+          {[...Array(4)].map((_, i) => (
+            <Grid item xs={12} md={6} key={i}>
+              <ChartSkeleton />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    );
+  }
+
+  if (analyticsError) {
+    return (
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {analyticsError}
+        </Alert>
+      </Container>
+    );
+  }
+
+  const hasData = analyticsData.summary && (
+    analyticsData.summary.income > 0 || 
+    analyticsData.summary.expenses > 0 ||
+    analyticsData.summary.savings > 0
+  );
+
+  if (!hasData) {
+    return (
+      <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight="bold" sx={{ mb: 4 }}>
+          Financial Analytics
+        </Typography>
+        <DateRangeFilter onApply={handleDateRangeChange} onQuickSelect={handleDateRangeChange} />
+        <Paper sx={{ mt: 4 }}>
+          <EmptyState
+            icon={<TrendingUpIcon />}
+            title="No Analytics Data"
+            description="Start adding expenses and income to see your financial analytics here."
+            size="large"
+          />
+        </Paper>
+      </Container>
     );
   }
 
@@ -57,29 +132,27 @@ const AnalyticsDashboard = () => {
       <Typography variant="h4" gutterBottom fontWeight="bold">
         Financial Analytics
       </Typography>
-      <Typography variant="body2" color="text.secondary" gutterBottom>
+      <Typography variant="body2" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
         Track your spending, income, and budget performance
       </Typography>
 
       <DateRangeFilter onApply={handleDateRangeChange} onQuickSelect={handleDateRangeChange} />
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error}
-        </Alert>
-      )}
-
       <SummaryCards summary={analyticsData.summary} />
 
-      <Box sx={{ mt: 4 }}>
-        <Tabs value={tabValue} onChange={handleTabChange} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Paper sx={{ mt: 4, overflow: 'hidden' }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
+        >
           <Tab label="Overview" />
           <Tab label="Expenses" />
           <Tab label="Income" />
           <Tab label="Budget" />
         </Tabs>
 
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ p: 3 }}>
           {tabValue === 0 && (
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -127,7 +200,7 @@ const AnalyticsDashboard = () => {
             </Grid>
           )}
         </Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };
