@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Typography, Button, Card, LinearProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, IconButton, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, Card, LinearProgress, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, IconButton, CircularProgress, GlobalStyles } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { fetchBudgets, addBudget, updateBudget, deleteBudget } from '../redux/slices/budgetSlice';
 import { useToast } from '../components/common/Toast';
 import { formatCurrency } from '../utils/currencyFormatter';
+import { COLORS } from '../theme';
 
 const BudgetsPage = () => {
   const dispatch = useDispatch();
@@ -108,9 +109,9 @@ const BudgetsPage = () => {
   };
 
   const getProgressColor = (percentage) => {
-    if (percentage >= 80) return '#EF4444';
-    if (percentage >= 50) return '#F59E0B';
-    return '#52B69A';
+    if (percentage >= 85) return COLORS.red;
+    if (percentage >= 60) return COLORS.amber;
+    return COLORS.emerald;
   };
 
   if (loading && budgets.length === 0) {
@@ -122,9 +123,46 @@ const BudgetsPage = () => {
   }
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1400, mx: 'auto' }}>
+    <>
+      <GlobalStyles
+          styles={{
+            '@keyframes floatGrid': {
+              '0%': { backgroundPosition: '0px 0px' },
+              '100%': { backgroundPosition: '0px -48px' },
+            },
+          }}
+      />
+      <Box
+          sx={{
+            minHeight: '100vh',
+            width: '100%',
+            bgcolor: COLORS.bg,
+            position: 'relative',
+            overflow: 'hidden',
+            p: 3,
+            maxWidth: 1400,
+            mx: 'auto',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `linear-gradient(${COLORS.panelBorder} 1px, transparent 1px),
+                             linear-gradient(90deg, ${COLORS.panelBorder} 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
+              opacity: 0.25,
+              animation: 'floatGrid 12s linear infinite',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              background: `radial-gradient(ellipse at 50% 20%, ${COLORS.bgVignette} 0%, ${COLORS.bg} 70%)`,
+            },
+          }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h2" fontWeight={700} color="#0D1B2A">
+        <Typography variant="h2" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text }}>
           Budgets
         </Typography>
         <Button
@@ -132,9 +170,18 @@ const BudgetsPage = () => {
           startIcon={<AddIcon />}
           onClick={() => handleOpen()}
           sx={{
-            backgroundColor: '#34A0A4',
-            '&:hover': { backgroundColor: '#1A759F' },
-            borderRadius: 2,
+            background: `linear-gradient(90deg, ${COLORS.gold}, #E8C766)`,
+            color: '#0A0E17',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
+            textTransform: 'none',
+            borderRadius: '10px',
+            boxShadow: `0 8px 24px -8px ${COLORS.goldSoft}`,
+            '&:hover': {
+              background: `linear-gradient(90deg, #E8C766, ${COLORS.gold})`,
+              transform: 'translateY(-1px)',
+              boxShadow: `0 12px 28px -8px ${COLORS.goldSoft}`,
+            },
           }}
         >
           Add Budget
@@ -153,35 +200,38 @@ const BudgetsPage = () => {
                 key={budget.id}
                 sx={{
                   p: 3,
-                  borderRadius: 3,
-                  border: '1px solid #E0E7FF',
+                  bgcolor: COLORS.panel,
+                  backdropFilter: 'blur(20px)',
+                  border: `1px solid ${COLORS.panelBorder}`,
+                  borderRadius: '16px',
+                  boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)',
                   position: 'relative',
                 }}
               >
                 <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
                   <Box>
-                    <Typography variant="h6" fontWeight={700} color="#0D1B2A">
+                    <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text }}>
                       {budget.category?.name || 'Category'}
                     </Typography>
-                    <Typography variant="body2" color="#576B84">
+                    <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                       {budget.period}
                     </Typography>
                   </Box>
                   <Box display="flex" gap={1}>
-                    <IconButton onClick={() => handleOpen(budget)} size="small">
+                    <IconButton onClick={() => handleOpen(budget)} size="small" sx={{ color: COLORS.textDim, '&:hover': { color: COLORS.gold } }}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(budget.id)} size="small" color="error">
+                    <IconButton onClick={() => handleDelete(budget.id)} size="small" sx={{ color: COLORS.textDim, '&:hover': { color: COLORS.red } }}>
                       <DeleteIcon />
                     </IconButton>
                   </Box>
                 </Box>
 
                 <Box display="flex" justifyContent="space-between" mb={1}>
-                  <Typography variant="body2" fontWeight={600} color="#0D1B2A">
-                    Spent: {formatCurrency(spent)}
+                  <Typography variant="body2" sx={{ fontWeight: 600, color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>
+                    Spent: <span style={{ fontFamily: 'JetBrains Mono, monospace' }}>{formatCurrency(spent)}</span>
                   </Typography>
-                  <Typography variant="body2" color="#576B84">
+                  <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace' }}>
                     Limit: {formatCurrency(budget.limitAmount)}
                   </Typography>
                 </Box>
@@ -192,7 +242,7 @@ const BudgetsPage = () => {
                   sx={{
                     height: 8,
                     borderRadius: 4,
-                    backgroundColor: '#E0E7FF',
+                    backgroundColor: 'rgba(255,255,255,0.08)',
                     mb: 1,
                     '& .MuiLinearProgress-bar': {
                       backgroundColor: progressColor,
@@ -202,13 +252,16 @@ const BudgetsPage = () => {
                 />
 
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="caption" color={progressColor} fontWeight={600}>
+                  <Typography variant="caption" sx={{ color: progressColor, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>
                     {percentage.toFixed(1)}% used
                   </Typography>
                   <Typography
                     variant="caption"
-                    color={remaining >= 0 ? '#52B69A' : '#EF4444'}
-                    fontWeight={600}
+                    sx={{
+                      color: remaining >= 0 ? COLORS.emerald : COLORS.red,
+                      fontWeight: 600,
+                      fontFamily: 'JetBrains Mono, monospace',
+                    }}
                   >
                     {remaining >= 0 ? `${formatCurrency(remaining)} remaining` : `${formatCurrency(Math.abs(remaining))} over`}
                   </Typography>
@@ -217,16 +270,31 @@ const BudgetsPage = () => {
             );
           })
         ) : (
-          <Card sx={{ p: 6, borderRadius: 3, border: '1px solid #E0E7FF', textAlign: 'center' }}>
-            <Typography variant="body2" color="#576B84">
+          <Card sx={{ p: 6, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)', textAlign: 'center' }}>
+            <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
               No budgets yet. Create your first budget to start tracking your spending!
             </Typography>
           </Card>
         )}
       </Box>
 
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{editingBudget ? 'Edit Budget' : 'Add Budget'}</DialogTitle>
+      <Dialog 
+        open={open} 
+        onClose={handleClose} 
+        maxWidth="sm" 
+        fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: COLORS.panel,
+            backdropFilter: 'blur(20px)',
+            border: `1px solid ${COLORS.panelBorder}`,
+            borderRadius: '16px',
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text }}>
+          {editingBudget ? 'Edit Budget' : 'Add Budget'}
+        </DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ mt: 2 }}>
             <TextField
@@ -237,13 +305,30 @@ const BudgetsPage = () => {
               onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
               margin="normal"
               required
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '10px',
+                  bgcolor: COLORS.fieldBg,
+                  color: COLORS.text,
+                  fontFamily: 'Inter, sans-serif',
+                  '& fieldset': { borderColor: COLORS.fieldBorder },
+                  '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                  '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: COLORS.textFaint,
+                  fontFamily: 'Inter, sans-serif',
+                  '&.Mui-focused': { color: COLORS.gold },
+                },
+                '& .MuiSelect-icon': { color: COLORS.textDim },
+              }}
             >
-              <MenuItem value="">Select Category</MenuItem>
-              <MenuItem value="1">Food</MenuItem>
-              <MenuItem value="2">Transport</MenuItem>
-              <MenuItem value="3">Entertainment</MenuItem>
-              <MenuItem value="4">Shopping</MenuItem>
-              <MenuItem value="5">Utilities</MenuItem>
+              <MenuItem value="" sx={{ color: COLORS.text }}>Select Category</MenuItem>
+              <MenuItem value="1" sx={{ color: COLORS.text }}>Food</MenuItem>
+              <MenuItem value="2" sx={{ color: COLORS.text }}>Transport</MenuItem>
+              <MenuItem value="3" sx={{ color: COLORS.text }}>Entertainment</MenuItem>
+              <MenuItem value="4" sx={{ color: COLORS.text }}>Shopping</MenuItem>
+              <MenuItem value="5" sx={{ color: COLORS.text }}>Utilities</MenuItem>
             </TextField>
             <TextField
               fullWidth
@@ -254,6 +339,22 @@ const BudgetsPage = () => {
               margin="normal"
               required
               inputProps={{ min: 0, step: 0.01 }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '10px',
+                  bgcolor: COLORS.fieldBg,
+                  color: COLORS.text,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  '& fieldset': { borderColor: COLORS.fieldBorder },
+                  '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                  '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: COLORS.textFaint,
+                  fontFamily: 'Inter, sans-serif',
+                  '&.Mui-focused': { color: COLORS.gold },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -263,6 +364,22 @@ const BudgetsPage = () => {
               onChange={(e) => setFormData({ ...formData, alertPercentage: e.target.value })}
               margin="normal"
               inputProps={{ min: 0, max: 100, step: 1 }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '10px',
+                  bgcolor: COLORS.fieldBg,
+                  color: COLORS.text,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  '& fieldset': { borderColor: COLORS.fieldBorder },
+                  '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                  '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: COLORS.textFaint,
+                  fontFamily: 'Inter, sans-serif',
+                  '&.Mui-focused': { color: COLORS.gold },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -271,27 +388,68 @@ const BudgetsPage = () => {
               value={formData.period}
               onChange={(e) => setFormData({ ...formData, period: e.target.value })}
               margin="normal"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '10px',
+                  bgcolor: COLORS.fieldBg,
+                  color: COLORS.text,
+                  fontFamily: 'Inter, sans-serif',
+                  '& fieldset': { borderColor: COLORS.fieldBorder },
+                  '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                  '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                },
+                '& .MuiInputLabel-root': {
+                  color: COLORS.textFaint,
+                  fontFamily: 'Inter, sans-serif',
+                  '&.Mui-focused': { color: COLORS.gold },
+                },
+                '& .MuiSelect-icon': { color: COLORS.textDim },
+              }}
             >
-              <MenuItem value="MONTHLY">Monthly</MenuItem>
-              <MenuItem value="YEARLY">Yearly</MenuItem>
+              <MenuItem value="MONTHLY" sx={{ color: COLORS.text }}>Monthly</MenuItem>
+              <MenuItem value="YEARLY" sx={{ color: COLORS.text }}>Yearly</MenuItem>
             </TextField>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button 
+            onClick={handleClose}
+            sx={{
+              color: COLORS.textDim,
+              fontFamily: 'Inter, sans-serif',
+              '&:hover': {
+                backgroundColor: 'rgba(212, 175, 55, 0.08)',
+                color: COLORS.text,
+              },
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             onClick={handleSubmit}
             variant="contained"
             sx={{
-              backgroundColor: '#34A0A4',
-              '&:hover': { backgroundColor: '#1A759F' },
+              background: `linear-gradient(90deg, ${COLORS.gold}, #E8C766)`,
+              color: '#0A0E17',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 600,
+              textTransform: 'none',
+              borderRadius: '10px',
+              boxShadow: `0 8px 24px -8px ${COLORS.goldSoft}`,
+              '&:hover': {
+                background: `linear-gradient(90deg, #E8C766, ${COLORS.gold})`,
+                transform: 'translateY(-1px)',
+                boxShadow: `0 12px 28px -8px ${COLORS.goldSoft}`,
+              },
             }}
           >
             {editingBudget ? 'Update' : 'Add'}
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

@@ -2,15 +2,16 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Box, Typography, Card, CardContent, useTheme } from '@mui/material';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import { COLORS } from '../../theme';
 
 const TrendChart = ({ data }) => {
   const theme = useTheme();
   
   if (!data || data.length === 0) {
     return (
-      <Card sx={{ height: 400, borderRadius: 2 }}>
+      <Card sx={{ height: 400, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 2 }}>
             Spending Trend
           </Typography>
           <Box 
@@ -19,7 +20,7 @@ const TrendChart = ({ data }) => {
             justifyContent="center" 
             height={300}
           >
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
               No trend data available
             </Typography>
           </Box>
@@ -39,23 +40,22 @@ const TrendChart = ({ data }) => {
       return (
         <Box
           sx={{
-            bgcolor: 'background.paper',
+            bgcolor: COLORS.panel,
+            backdropFilter: 'blur(20px)',
             p: 1.5,
-            borderRadius: 1,
-            boxShadow: 3,
-            border: '1px solid',
-            borderColor: 'divider'
+            borderRadius: '10px',
+            boxShadow: '0 8px 24px -8px rgba(0,0,0,0.6)',
+            border: `1px solid ${COLORS.panelBorder}`,
           }}
         >
-          <Typography variant="body2" fontWeight="bold" gutterBottom>
+          <Typography variant="body2" sx={{ fontWeight: 600, color: COLORS.text, fontFamily: 'Inter, sans-serif', mb: 1 }}>
             {label}
           </Typography>
           {payload.map((entry, index) => (
             <Typography 
               key={index} 
               variant="body2" 
-              color={entry.color}
-              sx={{ display: 'block' }}
+              sx={{ color: entry.color, fontFamily: 'JetBrains Mono, monospace', display: 'block' }}
             >
               {entry.name}: {formatCurrency(entry.value)}
             </Typography>
@@ -67,42 +67,44 @@ const TrendChart = ({ data }) => {
   };
 
   return (
-    <Card sx={{ height: 400, borderRadius: 2 }}>
+    <Card sx={{ height: 400, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 2 }}>
           Spending Trend
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke={COLORS.panelBorder} />
             <XAxis 
               dataKey="month" 
               tick={{ fontSize: 12 }}
-              stroke={theme.palette.text.secondary}
+              stroke={COLORS.textDim}
+              style={{ fontFamily: 'Inter, sans-serif' }}
             />
             <YAxis 
               tick={{ fontSize: 12 }}
               tickFormatter={(value) => `$${value}`}
-              stroke={theme.palette.text.secondary}
+              stroke={COLORS.textDim}
+              style={{ fontFamily: 'JetBrains Mono, monospace' }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Line 
               type="monotone" 
               dataKey="income" 
-              stroke={theme.palette.success.main}
+              stroke={COLORS.emerald}
               strokeWidth={2}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
+              dot={{ r: 4, fill: COLORS.emerald }}
+              activeDot={{ r: 6, fill: COLORS.emerald }}
               name="Income"
             />
             <Line 
               type="monotone" 
               dataKey="expenses" 
-              stroke={theme.palette.error.main}
+              stroke={COLORS.red}
               strokeWidth={2}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
+              dot={{ r: 4, fill: COLORS.red }}
+              activeDot={{ r: 6, fill: COLORS.red }}
               name="Expenses"
             />
           </LineChart>

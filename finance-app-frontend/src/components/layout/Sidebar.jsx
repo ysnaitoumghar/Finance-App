@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, useMediaQuery, useTheme } from '@mui/material';
-import { Menu as MenuIcon, Dashboard as DashboardIcon, Receipt as TransactionsIcon, AccountBalance as BudgetsIcon, Flag as GoalsIcon, AccountBalanceWallet as AccountsIcon, Assessment as ReportsIcon } from '@mui/icons-material';
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, useMediaQuery, useTheme, Typography } from '@mui/material';
+import { Menu as MenuIcon, Dashboard as DashboardIcon, Receipt as TransactionsIcon, AccountBalance as BudgetsIcon, Flag as GoalsIcon, AccountBalanceWallet as AccountsIcon, Assessment as ReportsIcon, TrendingUp } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { COLORS } from '../../theme';
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
@@ -27,7 +28,9 @@ const Sidebar = ({ open, onClose }) => {
     <Box
       sx={{
         width: 240,
-        backgroundColor: '#184E77',
+        backgroundColor: COLORS.panel,
+        backdropFilter: 'blur(20px)',
+        borderRight: `1px solid ${COLORS.panelBorder}`,
         height: '100vh',
         position: 'fixed',
         left: 0,
@@ -39,7 +42,7 @@ const Sidebar = ({ open, onClose }) => {
     >
       {isMobile && (
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton onClick={onClose} sx={{ color: 'white' }}>
+          <IconButton onClick={onClose} sx={{ color: COLORS.text }}>
             <MenuIcon />
           </IconButton>
         </Box>
@@ -48,40 +51,66 @@ const Sidebar = ({ open, onClose }) => {
       <Box sx={{ p: 3 }}>
         <Box
           sx={{
-            color: 'white',
-            fontSize: '1.5rem',
-            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
             mb: 4,
           }}
         >
-          FinanceApp
+          <TrendingUp sx={{ color: COLORS.gold, fontSize: 24 }} />
+          <Typography
+            sx={{
+              color: COLORS.text,
+              fontFamily: 'Fraunces, serif',
+              fontWeight: 600,
+              fontSize: 18,
+            }}
+          >
+            Finance App
+          </Typography>
         </Box>
         
         <List sx={{ p: 0 }}>
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
-              <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+              <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
                   onClick={() => handleNavigation(item.path)}
                   sx={{
-                    borderRadius: 2,
-                    mx: 1,
-                    backgroundColor: isActive ? '#34A0A4' : 'transparent',
-                    color: 'white',
+                    borderRadius: '10px',
+                    mx: 0.5,
+                    py: 1.5,
+                    color: isActive ? COLORS.text : COLORS.textDim,
+                    fontFamily: 'Inter, sans-serif',
+                    position: 'relative',
                     '&:hover': {
-                      backgroundColor: isActive ? '#34A0A4' : 'rgba(255, 255, 255, 0.1)',
+                      backgroundColor: 'rgba(212, 175, 55, 0.08)',
+                      color: COLORS.text,
+                    },
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      left: 0,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: isActive ? '3px' : 0,
+                      height: '60%',
+                      backgroundColor: COLORS.gold,
+                      borderRadius: '0 2px 2px 0',
+                      transition: 'all 0.2s ease',
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ color: 'white', minWidth: 40 }}>
+                  <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText
                     primary={item.text}
                     sx={{
                       '& .MuiTypography-root': {
-                        fontWeight: isActive ? 600 : 400,
+                        fontWeight: isActive ? 600 : 500,
+                        fontSize: 14,
                       },
                     }}
                   />

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, AppBar, Toolbar, InputBase, IconButton, Badge, Avatar, Typography, useMediaQuery, useTheme, Menu, MenuItem } from '@mui/material';
 import { Search as SearchIcon, Notifications as NotificationsIcon, Menu as MenuIcon, Logout as LogoutIcon } from '@mui/icons-material';
 import { logout } from '../../redux/slices/authSlice';
+import { COLORS } from '../../theme';
 
 const Header = ({ onMenuClick }) => {
   const dispatch = useDispatch();
@@ -31,8 +32,9 @@ const Header = ({ onMenuClick }) => {
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #E0E7FF',
+        backgroundColor: COLORS.panel,
+        backdropFilter: 'blur(20px)',
+        borderBottom: `1px solid ${COLORS.panelBorder}`,
         boxShadow: 'none',
         ml: { md: '240px' },
         width: { md: 'calc(100% - 240px)' },
@@ -45,7 +47,7 @@ const Header = ({ onMenuClick }) => {
             edge="start"
             color="inherit"
             onClick={onMenuClick}
-            sx={{ mr: 2, color: '#0D1B2A' }}
+            sx={{ mr: 2, color: COLORS.text }}
           >
             <MenuIcon />
           </IconButton>
@@ -55,42 +57,48 @@ const Header = ({ onMenuClick }) => {
           variant="h6"
           sx={{
             flexGrow: 1,
-            color: '#0D1B2A',
-            fontWeight: 700,
+            color: COLORS.text,
+            fontFamily: 'Fraunces, serif',
+            fontWeight: 600,
             display: { xs: 'none', sm: 'block' },
           }}
         >
-          FinanceApp
+          Finance App
         </Typography>
 
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            backgroundColor: '#F8FAFC',
-            borderRadius: 2,
+            backgroundColor: COLORS.fieldBg,
+            borderRadius: '10px',
             px: 2,
             py: 1,
             mx: 2,
             width: { xs: '100%', sm: 300 },
+            border: `1px solid ${COLORS.fieldBorder}`,
+            '&:hover': {
+              borderColor: COLORS.goldSoft,
+            },
           }}
         >
-          <SearchIcon sx={{ color: '#576B84', mr: 1 }} />
+          <SearchIcon sx={{ color: COLORS.textFaint, mr: 1 }} />
           <InputBase
             placeholder="Search transactions..."
             sx={{
               flex: 1,
-              color: '#0D1B2A',
+              color: COLORS.text,
+              fontFamily: 'Inter, sans-serif',
               '& input::placeholder': {
-                color: '#576B84',
+                color: COLORS.textFaint,
               },
             }}
           />
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <IconButton sx={{ color: '#0D1B2A' }}>
-            <Badge badgeContent={3} color="error">
+          <IconButton sx={{ color: COLORS.text }}>
+            <Badge badgeContent={3} sx={{ '& .MuiBadge-badge': { backgroundColor: COLORS.red } }}>
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -100,8 +108,12 @@ const Header = ({ onMenuClick }) => {
             sx={{
               width: 40,
               height: 40,
-              backgroundColor: '#34A0A4',
+              backgroundColor: 'rgba(212, 175, 55, 0.2)',
+              color: COLORS.gold,
               cursor: 'pointer',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontWeight: 600,
+              border: `1px solid ${COLORS.goldSoft}`,
             }}
           >
             {username ? username.charAt(0).toUpperCase() : 'U'}
@@ -121,9 +133,27 @@ const Header = ({ onMenuClick }) => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        PaperProps={{
+          sx: {
+            backgroundColor: COLORS.panel,
+            backdropFilter: 'blur(20px)',
+            border: `1px solid ${COLORS.panelBorder}`,
+            borderRadius: '12px',
+            minWidth: 180,
+          },
+        }}
       >
-        <MenuItem onClick={handleLogout}>
-          <LogoutIcon sx={{ mr: 1 }} />
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            color: COLORS.text,
+            fontFamily: 'Inter, sans-serif',
+            '&:hover': {
+              backgroundColor: 'rgba(212, 175, 55, 0.1)',
+            },
+          }}
+        >
+          <LogoutIcon sx={{ mr: 1, color: COLORS.textDim }} />
           Logout
         </MenuItem>
       </Menu>

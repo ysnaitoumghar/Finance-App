@@ -1,97 +1,161 @@
 import { createTheme } from '@mui/material/styles';
 
+// Ledger Design System Palette
+const COLORS = {
+  bg: '#0A0E17',
+  bgVignette: '#0D1220',
+  panel: 'rgba(19, 26, 41, 0.72)',
+  panelBorder: 'rgba(212, 175, 55, 0.18)',
+  gold: '#D4AF37',
+  goldSoft: 'rgba(212, 175, 55, 0.35)',
+  emerald: '#2FBF8F',
+  amber: '#E0A03B',
+  red: '#E5484D',
+  text: '#E8ECF1',
+  textDim: '#8B95A7',
+  textFaint: '#5A6478',
+  fieldBg: 'rgba(255,255,255,0.03)',
+  fieldBorder: 'rgba(255,255,255,0.1)',
+};
+
 const theme = createTheme({
   palette: {
-    primary: {
-      light: '#52B69A',   // Ocean Mist
-      main: '#34A0A4',    // Tropical Teal
-      medium: '#168AAD',  // Bondi Blue
-      dark: '#1A759F',    // Cerulean
-      darker: '#1E6091', // Baltic Blue
-      accent: '#184E77',  // Yale Blue
-    },
-    text: {
-      primary: '#0D1B2A',
-      secondary: '#576B84',
-      disabled: '#9CA3AF',
-    },
+    mode: 'dark',
     background: {
-      default: '#F8FAFC',
-      paper: '#FFFFFF',
+      default: COLORS.bg,
+      paper: COLORS.panel,
     },
-    success: {
-      main: '#52B69A',
+    primary: {
+      main: COLORS.gold,
+      light: '#E8C766',
+      dark: '#B8942E',
     },
-    warning: {
-      main: '#F59E0B',
+    secondary: {
+      main: COLORS.emerald,
     },
     error: {
-      main: '#EF4444',
+      main: COLORS.red,
     },
-    divider: '#E0E7FF',
+    warning: {
+      main: COLORS.amber,
+    },
+    success: {
+      main: COLORS.emerald,
+    },
+    text: {
+      primary: COLORS.text,
+      secondary: COLORS.textDim,
+      disabled: COLORS.textFaint,
+    },
+    divider: COLORS.panelBorder,
   },
   typography: {
     fontFamily: '"Inter", "Segoe UI", sans-serif',
     h1: {
-      fontWeight: 700,
+      fontFamily: '"Fraunces", serif',
+      fontWeight: 600,
     },
     h2: {
-      fontWeight: 700,
-      color: '#0D1B2A',
+      fontFamily: '"Fraunces", serif',
+      fontWeight: 600,
+      color: COLORS.text,
     },
     h3: {
-      fontWeight: 700,
+      fontFamily: '"Fraunces", serif',
+      fontWeight: 600,
+      color: COLORS.text,
     },
     h4: {
-      fontWeight: 700,
+      fontFamily: '"Fraunces", serif',
+      fontWeight: 600,
+      color: COLORS.text,
     },
     h5: {
+      fontFamily: '"Fraunces", serif',
       fontWeight: 600,
+      color: COLORS.text,
     },
     h6: {
+      fontFamily: '"Fraunces", serif',
       fontWeight: 600,
+      color: COLORS.text,
     },
     body1: {
+      fontFamily: '"Inter", sans-serif',
       fontWeight: 400,
     },
     body2: {
+      fontFamily: '"Inter", sans-serif',
       fontWeight: 400,
+    },
+    button: {
+      fontFamily: '"Inter", sans-serif',
+      fontWeight: 600,
+      textTransform: 'none',
+    },
+    caption: {
+      fontFamily: '"JetBrains Mono", monospace',
     },
   },
   components: {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
-          border: '1px solid #E0E7FF',
+          backgroundColor: COLORS.panel,
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${COLORS.panelBorder}`,
+          borderRadius: '16px',
+          boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)',
           padding: '24px',
-          '&:hover': {
-            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12)',
-          },
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: '10px',
           padding: '10px 24px',
           fontWeight: 600,
-          transition: 'all 0.3s ease',
+          textTransform: 'none',
+          transition: 'transform 0.15s ease, box-shadow 0.15s ease',
         },
         containedPrimary: {
-          backgroundColor: '#34A0A4',
+          background: `linear-gradient(90deg, ${COLORS.gold}, #E8C766)`,
+          color: '#0A0E17',
+          boxShadow: `0 8px 24px -8px ${COLORS.goldSoft}`,
           '&:hover': {
-            backgroundColor: '#1A759F',
+            background: `linear-gradient(90deg, #E8C766, ${COLORS.gold})`,
+            transform: 'translateY(-1px)',
+            boxShadow: `0 12px 28px -8px ${COLORS.goldSoft}`,
           },
         },
         outlined: {
-          backgroundColor: '#F8FAFC',
-          border: '1px solid #168AAD',
-          color: '#1A759F',
+          borderColor: COLORS.panelBorder,
+          color: COLORS.text,
+          backgroundColor: 'transparent',
           '&:hover': {
-            backgroundColor: '#E0E7FF',
+            backgroundColor: 'rgba(255,255,255,0.04)',
+            borderColor: COLORS.goldSoft,
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '10px',
+            backgroundColor: COLORS.fieldBg,
+            color: COLORS.text,
+            fontFamily: '"Inter", sans-serif',
+            '& fieldset': { borderColor: COLORS.fieldBorder },
+            '&:hover fieldset': { borderColor: COLORS.goldSoft },
+            '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+          },
+          '& .MuiInputLabel-root': {
+            color: COLORS.textFaint,
+            fontFamily: '"Inter", sans-serif',
+            '&.Mui-focused': { color: COLORS.gold },
           },
         },
       },
@@ -101,10 +165,28 @@ const theme = createTheme({
         root: {
           height: 8,
           borderRadius: 4,
-          backgroundColor: '#E0E7FF',
+          backgroundColor: 'rgba(255,255,255,0.08)',
         },
         bar: {
           borderRadius: 4,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: COLORS.panel,
+          backdropFilter: 'blur(20px)',
+          backgroundImage: 'none',
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: COLORS.panel,
+          backdropFilter: 'blur(20px)',
+          borderBottom: `1px solid ${COLORS.panelBorder}`,
         },
       },
     },
@@ -113,3 +195,4 @@ const theme = createTheme({
 });
 
 export default theme;
+export { COLORS };

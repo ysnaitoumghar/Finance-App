@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Typography, Paper, FormControlLabel, Checkbox, useTheme, Grid } from '@mui/material';
+import { Box, Container, Typography, Paper, FormControlLabel, Checkbox, useTheme, Grid, GlobalStyles } from '@mui/material';
 import { fetchAllAnalytics, setDateRange } from '../../redux/slices/analyticsSlice';
 import { useToast } from '../../components/common/Toast';
 import DateRangeFilter from '../../components/analytics/DateRangeFilter';
@@ -10,6 +10,7 @@ import { SummaryCardSkeleton, ChartSkeleton } from '../../components/common/Skel
 import EmptyState from '../../components/common/EmptyState';
 import { getDateRanges, formatDate } from '../../utils/dateHelpers';
 import { Description as DescriptionIcon } from '@mui/icons-material';
+import { COLORS } from '../../theme';
 
 const ReportsPage = () => {
   const dispatch = useDispatch();
@@ -133,11 +134,46 @@ const ReportsPage = () => {
   }
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight="bold">
+    <>
+      <GlobalStyles
+          styles={{
+            '@keyframes floatGrid': {
+              '0%': { backgroundPosition: '0px 0px' },
+              '100%': { backgroundPosition: '0px -48px' },
+            },
+          }}
+      />
+      <Box
+          sx={{
+            minHeight: '100vh',
+            width: '100%',
+            bgcolor: COLORS.bg,
+            position: 'relative',
+            overflow: 'hidden',
+            py: 4,
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `linear-gradient(${COLORS.panelBorder} 1px, transparent 1px),
+                             linear-gradient(90deg, ${COLORS.panelBorder} 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
+              opacity: 0.25,
+              animation: 'floatGrid 12s linear infinite',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              background: `radial-gradient(ellipse at 50% 20%, ${COLORS.bgVignette} 0%, ${COLORS.bg} 70%)`,
+            },
+          }}
+      >
+        <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
+      <Typography variant="h4" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 1 }}>
         Reports
       </Typography>
-      <Typography variant="body2" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+      <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif', mb: 4 }}>
         Generate and export financial reports
       </Typography>
 
@@ -149,18 +185,26 @@ const ReportsPage = () => {
             <Checkbox
               checked={includeCharts}
               onChange={(e) => setIncludeCharts(e.target.checked)}
+              sx={{
+                color: COLORS.goldSoft,
+                '&.Mui-checked': { color: COLORS.gold },
+              }}
             />
           }
-          label="Include Charts in Report"
+          label={<Typography sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>Include Charts in Report</Typography>}
         />
         <FormControlLabel
           control={
             <Checkbox
               checked={includeTransactions}
               onChange={(e) => setIncludeTransactions(e.target.checked)}
+              sx={{
+                color: COLORS.goldSoft,
+                '&.Mui-checked': { color: COLORS.gold },
+              }}
             />
           }
-          label="Include Transaction Details"
+          label={<Typography sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>Include Transaction Details</Typography>}
         />
       </Box>
 
@@ -176,14 +220,18 @@ const ReportsPage = () => {
         ref={reportRef}
         sx={{ 
           p: 4,
-          bgcolor: 'background.paper',
-          boxShadow: 3,
-          borderRadius: 2
+          bgcolor: COLORS.panel,
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${COLORS.panelBorder}`,
+          borderRadius: '16px',
+          boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)',
         }}
       >
         <ReportPreview data={reportData} dateRange={dateRange} />
       </Paper>
-    </Container>
+        </Container>
+      </Box>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid, Typography, Card, CardContent, alpha, useTheme, Select, MenuItem, FormControl, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Box, Grid, Typography, Card, CardContent, alpha, useTheme, Select, MenuItem, FormControl, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, GlobalStyles } from '@mui/material';
 import { fetchExpenses } from '../../redux/slices/expenseSlice';
 import { useToast } from '../../components/common/Toast';
 import { SummaryCardSkeleton } from '../../components/common/SkeletonLoader';
@@ -9,6 +9,7 @@ import EmptyState from '../../components/common/EmptyState';
 import { TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '@mui/icons-material';
 import { getDateRanges, formatDate } from '../../utils/dateHelpers';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import { COLORS } from '../../theme';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -52,33 +53,33 @@ const Dashboard = () => {
       title: 'Total Monthly Spending',
       value: totalExpenses,
       trend: 12.5,
-      color: '#EF4444',
+      color: COLORS.red,
       icon: '💰',
-      gradient: 'linear-gradient(135deg, rgba(82, 182, 154, 0.08) 0%, rgba(82, 182, 154, 0.02) 100%)'
+      gradient: 'linear-gradient(135deg, rgba(229, 72, 77, 0.12) 0%, rgba(229, 72, 77, 0.04) 100%)'
     },
     {
       title: 'Total Income',
       value: totalIncome,
       trend: 8.2,
-      color: '#52B69A',
+      color: COLORS.emerald,
       icon: '💵',
-      gradient: 'linear-gradient(135deg, rgba(82, 182, 154, 0.08) 0%, rgba(82, 182, 154, 0.02) 100%)'
+      gradient: 'linear-gradient(135deg, rgba(47, 191, 143, 0.12) 0%, rgba(47, 191, 143, 0.04) 100%)'
     },
     {
       title: 'Savings',
       value: savings,
       trend: 15.3,
-      color: '#34A0A4',
+      color: COLORS.gold,
       icon: '🏦',
-      gradient: 'linear-gradient(135deg, rgba(52, 160, 164, 0.08) 0%, rgba(52, 160, 164, 0.02) 100%)'
+      gradient: 'linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.04) 100%)'
     },
     {
       title: 'Budget Remaining',
       value: budgetRemaining,
       trend: -5.1,
-      color: '#1A759F',
+      color: COLORS.amber,
       icon: '📊',
-      gradient: 'linear-gradient(135deg, rgba(26, 117, 159, 0.08) 0%, rgba(26, 117, 159, 0.02) 100%)'
+      gradient: 'linear-gradient(135deg, rgba(224, 160, 59, 0.12) 0%, rgba(224, 160, 59, 0.04) 100%)'
     }
   ];
 
@@ -116,29 +117,89 @@ const Dashboard = () => {
   const recentTransactions = expenses.slice(0, 5);
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1400, mx: 'auto' }}>
-      {/* Row 1: Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h2" fontWeight={700} color="#0D1B2A">
-          Spending Dashboard
-        </Typography>
-        <FormControl sx={{ minWidth: 150 }}>
-          <Select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            sx={{
-              borderRadius: 2,
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: '#E0E7FF',
-              },
-            }}
-          >
-            <MenuItem value="October 2023">October 2023</MenuItem>
-            <MenuItem value="September 2023">September 2023</MenuItem>
-            <MenuItem value="August 2023">August 2023</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+    <>
+      <GlobalStyles
+          styles={{
+            '@keyframes drawLine': {
+              '0%': { transform: 'scaleX(0)', opacity: 0 },
+              '100%': { transform: 'scaleX(1)', opacity: 1 },
+            },
+            '@keyframes floatGrid': {
+              '0%': { backgroundPosition: '0px 0px' },
+              '100%': { backgroundPosition: '0px -48px' },
+            },
+          }}
+      />
+      <Box
+          sx={{
+            minHeight: '100vh',
+            width: '100%',
+            bgcolor: COLORS.bg,
+            position: 'relative',
+            overflow: 'hidden',
+            p: 3,
+            maxWidth: 1400,
+            mx: 'auto',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `linear-gradient(${COLORS.panelBorder} 1px, transparent 1px),
+                             linear-gradient(90deg, ${COLORS.panelBorder} 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
+              opacity: 0.25,
+              animation: 'floatGrid 12s linear infinite',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              background: `radial-gradient(ellipse at 50% 20%, ${COLORS.bgVignette} 0%, ${COLORS.bg} 70%)`,
+            },
+          }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          {/* Row 1: Header */}
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+            <Typography variant="h2" fontWeight={600} sx={{ fontFamily: 'Fraunces, serif', color: COLORS.text }}>
+              Spending Dashboard
+            </Typography>
+            <FormControl sx={{ minWidth: 150 }}>
+              <Select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                sx={{
+                  borderRadius: '10px',
+                  bgcolor: COLORS.fieldBg,
+                  color: COLORS.text,
+                  fontFamily: 'Inter, sans-serif',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: COLORS.fieldBorder,
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: COLORS.goldSoft,
+                  },
+                  '& .MuiSelect-icon': { color: COLORS.textDim },
+                }}
+              >
+                <MenuItem value="October 2023" sx={{ color: COLORS.text }}>October 2023</MenuItem>
+                <MenuItem value="September 2023" sx={{ color: COLORS.text }}>September 2023</MenuItem>
+                <MenuItem value="August 2023" sx={{ color: COLORS.text }}>August 2023</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Gold hairline divider */}
+          <Box
+              sx={{
+                height: '2px',
+                width: '100%',
+                mb: 4,
+                background: `linear-gradient(90deg, transparent, ${COLORS.gold}, transparent)`,
+                transformOrigin: 'center',
+                animation: 'drawLine 0.8s ease-out both',
+              }}
+          />
 
       {hasData ? (
         <>
@@ -148,19 +209,22 @@ const Dashboard = () => {
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card
                   sx={{
-                    background: card.gradient,
-                    border: '1px solid #E0E7FF',
-                    borderRadius: 3,
+                    bgcolor: COLORS.panel,
+                    backdropFilter: 'blur(20px)',
+                    border: `1px solid ${COLORS.panelBorder}`,
+                    borderRadius: '16px',
                     p: 3,
                     height: '100%',
-                    transition: 'all 0.3s ease',
+                    boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)',
+                    transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                     '&:hover': {
-                      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 28px 70px -20px rgba(0,0,0,0.7)',
                     },
                   }}
                 >
                   <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
-                    <Typography variant="body2" color="#576B84" fontWeight={500}>
+                    <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
                       {card.title}
                     </Typography>
                     <Box
@@ -168,7 +232,7 @@ const Dashboard = () => {
                         width: 40,
                         height: 40,
                         borderRadius: '50%',
-                        backgroundColor: alpha(card.color, 0.1),
+                        backgroundColor: alpha(card.color, 0.15),
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -178,19 +242,19 @@ const Dashboard = () => {
                       {card.icon}
                     </Box>
                   </Box>
-                  <Typography variant="h4" fontWeight={700} color="#0D1B2A" mb={1}>
+                  <Typography variant="h4" sx={{ fontFamily: 'JetBrains Mono, monospace', fontWeight: 600, color: COLORS.text, mb: 1 }}>
                     {formatCurrency(card.value)}
                   </Typography>
                   <Box display="flex" alignItems="center" gap={0.5}>
                     {card.trend > 0 ? (
-                      <TrendingUpIcon sx={{ color: '#52B69A', fontSize: '1rem' }} />
+                      <TrendingUpIcon sx={{ color: COLORS.emerald, fontSize: '1rem' }} />
                     ) : (
-                      <TrendingDownIcon sx={{ color: '#EF4444', fontSize: '1rem' }} />
+                      <TrendingDownIcon sx={{ color: COLORS.red, fontSize: '1rem' }} />
                     )}
-                    <Typography variant="body2" color={card.trend > 0 ? '#52B69A' : '#EF4444'} fontWeight={600}>
+                    <Typography variant="body2" sx={{ color: card.trend > 0 ? COLORS.emerald : COLORS.red, fontFamily: 'JetBrains Mono, monospace', fontWeight: 600 }}>
                       {Math.abs(card.trend)}%
                     </Typography>
-                    <Typography variant="body2" color="#576B84">
+                    <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                       vs last month
                     </Typography>
                   </Box>
@@ -202,71 +266,75 @@ const Dashboard = () => {
           {/* Row 3: Two Column Layout */}
           <Grid container spacing={3} mb={4}>
             <Grid item xs={12} md={7}>
-              <Card sx={{ p: 3, borderRadius: 3, border: '1px solid #E0E7FF' }}>
-                <Typography variant="h6" fontWeight={700} color="#0D1B2A" mb={3}>
+              <Card sx={{ p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+                <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 3 }}>
                   Top Categories
                 </Typography>
                 <Box height={300} display="flex" alignItems="center" justifyContent="center">
-                  <Typography variant="body2" color="#576B84">
+                  <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                     Chart component placeholder
                   </Typography>
                 </Box>
               </Card>
             </Grid>
             <Grid item xs={12} md={5}>
-              <Card sx={{ p: 3, borderRadius: 3, border: '1px solid #E0E7FF' }}>
-                <Typography variant="h6" fontWeight={700} color="#0D1B2A" mb={3}>
+              <Card sx={{ p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+                <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 3 }}>
                   Budget Overview
                 </Typography>
                 <Box>
-                  {[1, 2, 3].map((item) => (
-                    <Box key={item} mb={3}>
-                      <Box display="flex" justifyContent="space-between" mb={1}>
-                        <Typography variant="body2" fontWeight={600} color="#0D1B2A">
-                          Category {item}
-                        </Typography>
-                        <Typography variant="body2" color="#576B84">
-                          ${item * 100} / ${item * 200}
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          height: 8,
-                          borderRadius: 4,
-                          backgroundColor: '#E0E7FF',
-                          overflow: 'hidden',
-                        }}
-                      >
+                  {[1, 2, 3].map((item) => {
+                    const pct = item * 30;
+                    const barColor = pct < 60 ? COLORS.emerald : pct < 85 ? COLORS.amber : COLORS.red;
+                    return (
+                      <Box key={item} mb={3}>
+                        <Box display="flex" justifyContent="space-between" mb={1}>
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>
+                            Category {item}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace' }}>
+                            ${item * 100} / ${item * 200}
+                          </Typography>
+                        </Box>
                         <Box
                           sx={{
-                            height: '100%',
-                            width: `${item * 30}%`,
-                            backgroundColor: item === 1 ? '#52B69A' : item === 2 ? '#F59E0B' : '#EF4444',
+                            height: 8,
                             borderRadius: 4,
+                            backgroundColor: 'rgba(255,255,255,0.08)',
+                            overflow: 'hidden',
                           }}
-                        />
+                        >
+                          <Box
+                            sx={{
+                              height: '100%',
+                              width: `${pct}%`,
+                              backgroundColor: barColor,
+                              borderRadius: 4,
+                            }}
+                          />
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    );
+                  })}
                 </Box>
               </Card>
             </Grid>
           </Grid>
 
           {/* Row 4: Recent Transactions */}
-          <Card sx={{ p: 3, borderRadius: 3, border: '1px solid #E0E7FF', mb: 4 }}>
-            <Typography variant="h6" fontWeight={700} color="#0D1B2A" mb={3}>
+          <Card sx={{ p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', mb: 4, boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+            <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 3 }}>
               Recent Transactions
             </Typography>
             <TableContainer>
-              <Table>
+              <Table sx={{ '& .MuiTableCell-root': { borderBottom: `1px solid ${COLORS.panelBorder}` } }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Account</TableCell>
-                    <TableCell align="right">Amount</TableCell>
+                    <TableCell sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</TableCell>
+                    <TableCell sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Description</TableCell>
+                    <TableCell sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category</TableCell>
+                    <TableCell sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Account</TableCell>
+                    <TableCell align="right" sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Amount</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -275,19 +343,19 @@ const Dashboard = () => {
                       <TableRow
                         key={txn.id || index}
                         sx={{
-                          backgroundColor: index % 2 === 0 ? '#F8FAFC' : '#FFFFFF',
-                          '&:hover': { backgroundColor: '#E0E7FF' },
+                          '&:hover': { backgroundColor: 'rgba(212, 175, 55, 0.05)' },
                         }}
                       >
-                        <TableCell>{new Date(txn.expenseDate || txn.date).toLocaleDateString()}</TableCell>
-                        <TableCell>{txn.description}</TableCell>
-                        <TableCell>{txn.category?.name || 'Uncategorized'}</TableCell>
-                        <TableCell>{txn.paymentMethod || 'Cash'}</TableCell>
+                        <TableCell sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>{new Date(txn.expenseDate || txn.date).toLocaleDateString()}</TableCell>
+                        <TableCell sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>{txn.description}</TableCell>
+                        <TableCell sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>{txn.category?.name || 'Uncategorized'}</TableCell>
+                        <TableCell sx={{ color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>{txn.paymentMethod || 'Cash'}</TableCell>
                         <TableCell
                           align="right"
                           sx={{
-                            color: '#EF4444',
+                            color: COLORS.red,
                             fontWeight: 600,
+                            fontFamily: 'JetBrains Mono, monospace',
                           }}
                         >
                           -{formatCurrency(txn.amount)}
@@ -297,7 +365,7 @@ const Dashboard = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={5} align="center">
-                        <Typography variant="body2" color="#576B84">
+                        <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                           No recent transactions
                         </Typography>
                       </TableCell>
@@ -311,20 +379,20 @@ const Dashboard = () => {
           {/* Row 5: Two Column */}
           <Grid container spacing={3}>
             <Grid item xs={12} md={7}>
-              <Card sx={{ p: 3, borderRadius: 3, border: '1px solid #E0E7FF' }}>
-                <Typography variant="h6" fontWeight={700} color="#0D1B2A" mb={3}>
+              <Card sx={{ p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+                <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 3 }}>
                   Spending Trend
                 </Typography>
                 <Box height={250} display="flex" alignItems="center" justifyContent="center">
-                  <Typography variant="body2" color="#576B84">
+                  <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                     Line chart placeholder
                   </Typography>
                 </Box>
               </Card>
             </Grid>
             <Grid item xs={12} md={5}>
-              <Card sx={{ p: 3, borderRadius: 3, border: '1px solid #E0E7FF' }}>
-                <Typography variant="h6" fontWeight={700} color="#0D1B2A" mb={3}>
+              <Card sx={{ p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+                <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 3 }}>
                   Financial Goals
                 </Typography>
                 <Box>
@@ -336,7 +404,7 @@ const Dashboard = () => {
                             width: 40,
                             height: 40,
                             borderRadius: '50%',
-                            backgroundColor: alpha('#34A0A4', 0.1),
+                            backgroundColor: alpha(COLORS.gold, 0.15),
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -346,10 +414,10 @@ const Dashboard = () => {
                           🎯
                         </Box>
                         <Box>
-                          <Typography variant="body2" fontWeight={600} color="#0D1B2A">
+                          <Typography variant="body2" sx={{ fontWeight: 600, color: COLORS.text, fontFamily: 'Inter, sans-serif' }}>
                             Goal {goal}
                           </Typography>
-                          <Typography variant="caption" color="#576B84">
+                          <Typography variant="caption" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
                             Target: ${goal * 1000}
                           </Typography>
                         </Box>
@@ -358,7 +426,7 @@ const Dashboard = () => {
                         sx={{
                           height: 8,
                           borderRadius: 4,
-                          backgroundColor: '#E0E7FF',
+                          backgroundColor: 'rgba(255,255,255,0.08)',
                           overflow: 'hidden',
                         }}
                       >
@@ -366,12 +434,12 @@ const Dashboard = () => {
                           sx={{
                             height: '100%',
                             width: `${goal * 40}%`,
-                            backgroundColor: '#34A0A4',
+                            backgroundColor: COLORS.gold,
                             borderRadius: 4,
                           }}
                         />
                       </Box>
-                      <Typography variant="caption" color="#576B84" mt={0.5} display="block">
+                      <Typography variant="caption" sx={{ color: COLORS.textDim, fontFamily: 'JetBrains Mono, monospace', mt: 0.5, display: 'block' }}>
                         {goal * 40}% complete
                       </Typography>
                     </Box>
@@ -382,7 +450,7 @@ const Dashboard = () => {
           </Grid>
         </>
       ) : (
-        <Card sx={{ mt: 4, p: 3, borderRadius: 3, border: '1px solid #E0E7FF' }}>
+        <Card sx={{ mt: 4, p: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
           <EmptyState
             title="No Financial Data Yet"
             description="Start by adding your first expense or income to see your financial dashboard come to life."
@@ -392,7 +460,9 @@ const Dashboard = () => {
           />
         </Card>
       )}
-    </Box>
+        </Box>
+      </Box>
+    </>
   );
 };
 

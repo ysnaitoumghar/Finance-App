@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Snackbar, Alert, Slide } from '@mui/material';
+import { COLORS } from '../../theme';
 
 const ToastContext = createContext();
 
@@ -59,7 +60,19 @@ export const ToastProvider = ({ children }) => {
             onClose={() => removeToast(toast.id)}
             severity={toast.severity}
             variant="filled"
-            sx={{ minWidth: 300 }}
+            sx={{
+              minWidth: 300,
+              backgroundColor: toast.severity === 'success' ? COLORS.emerald :
+                             toast.severity === 'error' ? COLORS.red :
+                             toast.severity === 'warning' ? COLORS.amber : COLORS.panel,
+              color: toast.severity === 'info' ? COLORS.text : '#0A0E17',
+              fontFamily: 'Inter, sans-serif',
+              backdropFilter: 'blur(20px)',
+              border: `1px solid ${COLORS.panelBorder}`,
+              '& .MuiAlert-icon': {
+                color: toast.severity === 'info' ? COLORS.gold : 'inherit',
+              },
+            }}
           >
             {toast.message}
           </Alert>

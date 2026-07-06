@@ -6,6 +6,7 @@ import {
   AccountBalance as AccountBalanceIcon,
   Description as DescriptionIcon
 } from '@mui/icons-material';
+import { COLORS } from '../../theme';
 
 const EmptyState = ({ 
   icon, 
@@ -42,24 +43,48 @@ const EmptyState = ({
       <Box
         sx={{
           mb: 3,
-          color: theme.palette.text.secondary,
-          opacity: 0.5,
+          color: COLORS.textDim,
+          opacity: 0.4,
         }}
       >
         {icon || defaultIcons.expenses}
       </Box>
-      <Typography variant={titleVariant} gutterBottom fontWeight={600}>
+      <Typography 
+        variant={titleVariant} 
+        gutterBottom 
+        sx={{
+          fontWeight: 600,
+          fontFamily: 'Fraunces, serif',
+          color: COLORS.text,
+        }}
+      >
         {title}
       </Typography>
       <Typography 
         variant="body2" 
-        color="text.secondary" 
-        sx={{ mb: actionText ? 3 : 0, maxWidth: 400 }}
+        sx={{ 
+          color: COLORS.textDim,
+          fontFamily: 'Inter, sans-serif',
+          mb: actionText ? 3 : 0,
+          maxWidth: 400
+        }}
       >
         {description}
       </Typography>
       {actionText && onAction && (
-        <Button variant="contained" onClick={onAction}>
+        <Button 
+          variant="contained" 
+          onClick={onAction}
+          sx={{
+            background: `linear-gradient(90deg, ${COLORS.gold}, #E8C766)`,
+            color: '#0A0E17',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 600,
+            textTransform: 'none',
+            borderRadius: '10px',
+            boxShadow: `0 8px 24px -8px ${COLORS.goldSoft}`,
+          }}
+        >
           {actionText}
         </Button>
       )}
