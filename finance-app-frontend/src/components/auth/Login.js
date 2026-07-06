@@ -59,13 +59,17 @@ function Login() {
     }
 
     setValidationErrors({});
-    const result = await dispatch(login({ username, password }));
+    try {
+      const result = await dispatch(login({ username, password }));
 
-    if (result.payload) {
-      if (rememberMe) {
-        localStorage.setItem('rememberMe', 'true');
+      if (result.payload) {
+        if (rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+        navigate('/dashboard');
       }
-      navigate('/dashboard');
+    } catch (err) {
+      console.error('Login error:', err);
     }
   };
 

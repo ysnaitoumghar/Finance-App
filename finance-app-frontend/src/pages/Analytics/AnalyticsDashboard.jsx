@@ -17,7 +17,7 @@ import { TrendingUp as TrendingUpIcon } from '@mui/icons-material';
 const AnalyticsDashboard = () => {
   const dispatch = useDispatch();
   const { success, error } = useToast();
-  const { analyticsData, loading, error: analyticsError, selectedDateRange } = useSelector((state) => state.analytics);
+  const { analyticsData, loading, error: analyticsError, dateRange } = useSelector((state) => state.analytics);
   const [tabValue, setTabValue] = React.useState(0);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const AnalyticsDashboard = () => {
       endDate: formatDate(defaultRange.end),
       label: defaultRange.label
     }));
-    
+
     dispatch(fetchAllAnalytics({
       userId,
       startDate: formatDate(defaultRange.start),
@@ -46,7 +46,7 @@ const AnalyticsDashboard = () => {
       .catch((err) => {
         error('Failed to load analytics data');
       });
-  }, [dispatch, success, error]);
+  }, [dispatch]);
 
   const handleDateRangeChange = (range) => {
     const userId = localStorage.getItem('userId');

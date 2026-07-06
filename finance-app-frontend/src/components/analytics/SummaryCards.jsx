@@ -16,7 +16,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
   if (!summary) return null;
 
   const calculateChange = (current, previous) => {
-    if (!previous || previous === 0) return null;
+    if (previous === null || previous === undefined || previous === 0) return null;
     const change = ((current - previous) / previous) * 100;
     return change.toFixed(1);
   };

@@ -7,7 +7,7 @@ function Analytics({ analytics }) {
 
   const chartData = Object.entries(analytics?.byCategory || {}).map(([category, amount]) => ({
     name: category,
-    value: parseFloat(amount)
+    value: parseFloat(amount) || 0
   }));
 
   return (

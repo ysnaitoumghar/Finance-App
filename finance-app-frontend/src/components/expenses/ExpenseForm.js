@@ -39,7 +39,7 @@ function ExpenseForm({ userId, onExpenseAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await dispatch(addExpense({ userId, expenseData: formData }));
+      await dispatch(addExpense({ userId, expenseData: formData })).unwrap();
       setFormData({
         amount: '',
         categoryId: '',

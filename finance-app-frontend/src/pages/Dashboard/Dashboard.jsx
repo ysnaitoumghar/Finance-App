@@ -39,7 +39,7 @@ const Dashboard = () => {
         console.error('Dashboard load error:', err);
         error('Failed to load dashboard data');
       });
-  }, [dispatch, userId]);
+  }, [dispatch, userId, success, error]);
 
   // Calculate summary data from expenses
   const totalExpenses = (expenses || []).reduce((sum, exp) => sum + (exp.amount || 0), 0);

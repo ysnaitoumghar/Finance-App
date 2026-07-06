@@ -19,7 +19,7 @@ function ExpenseList({ expenses, onDelete, onRefresh }) {
         Recent Expenses
       </Typography>
       <List>
-        {expenses.map((expense) => (
+        {expenses?.map((expense) => (
           <ListItem
             key={expense.id}
             secondaryAction={

@@ -90,9 +90,14 @@ function Register() {
       return;
     }
 
-    const result = await dispatch(register({ username, email, password }));
-    if (!result.error) {
-      navigate('/login');
+    try {
+      const result = await dispatch(register({ username, email, password }));
+      if (!result.error) {
+        navigate('/login');
+      }
+    } catch (err) {
+      console.error('Registration error:', err);
+      setFormError('Registration failed. Please try again.');
     }
   };
 

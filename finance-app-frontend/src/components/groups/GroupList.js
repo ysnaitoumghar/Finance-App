@@ -18,10 +18,9 @@ function GroupList({ groups, onSelectGroup }) {
         Your Groups
       </Typography>
       <List>
-        {groups.map((group) => (
-          <ListItem 
-            key={group.id} 
-            button 
+        {groups?.map((group) => (
+          <ListItem
+            key={group.id}
             onClick={() => onSelectGroup(group)}
           >
             <ListItemText

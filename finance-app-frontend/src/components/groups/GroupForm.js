@@ -20,7 +20,7 @@ function GroupForm({ userId, onGroupCreated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await groupService.createGroup(userId, formData);
+      const response = await groupService.createGroup(userId, formData);
       setFormData({ name: '', description: '' });
       if (onGroupCreated) onGroupCreated();
     } catch (error) {

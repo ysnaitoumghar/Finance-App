@@ -30,7 +30,7 @@ function BudgetPage() {
         Budget Management
       </Typography>
       <BudgetForm userId={userId} onBudgetAdded={handleBudgetAdded} />
-      <BudgetList budgets={budgets} />
+      <BudgetList budgets={budgets || []} />
     </Box>
   );
 }

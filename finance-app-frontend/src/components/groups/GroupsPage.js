@@ -80,7 +80,7 @@ function GroupsPage() {
               Shared Expenses
             </Typography>
             <List>
-              {sharedExpenses.map((expense) => (
+              {sharedExpenses?.map((expense) => (
                 <ListItem key={expense.id}>
                   <ListItemText
                     primary={`₹${expense.amount} - ${expense.description || 'No description'}`}

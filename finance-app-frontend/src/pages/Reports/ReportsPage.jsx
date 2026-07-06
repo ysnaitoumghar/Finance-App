@@ -33,7 +33,7 @@ const ReportsPage = () => {
       endDate: formatDate(defaultRange.end),
       label: defaultRange.label
     }));
-    
+
     dispatch(fetchAllAnalytics({
       userId,
       startDate: formatDate(defaultRange.start),
@@ -46,7 +46,7 @@ const ReportsPage = () => {
       .catch((err) => {
         error('Failed to load report data');
       });
-  }, [dispatch, success, error]);
+  }, [dispatch]);
 
   const handleDateRangeChange = (range) => {
     const userId = localStorage.getItem('userId');
@@ -181,7 +181,7 @@ const ReportsPage = () => {
           borderRadius: 2
         }}
       >
-        <ReportPreview data={reportData} dateRange={selectedDateRange} />
+        <ReportPreview data={reportData} dateRange={dateRange} />
       </Paper>
     </Container>
   );

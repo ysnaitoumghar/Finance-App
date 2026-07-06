@@ -9,7 +9,7 @@ const menuItems = [
   { text: 'Budgets', icon: <BudgetsIcon />, path: '/budgets' },
   { text: 'Analytics', icon: <ReportsIcon />, path: '/analytics' },
   { text: 'Reports', icon: <ReportsIcon />, path: '/reports' },
-  { text: 'Groups', icon: <ReportsIcon />, path: '/groups' },
+  { text: 'Groups', icon: <AccountsIcon />, path: '/groups' },
 ];
 
 const Sidebar = ({ open, onClose }) => {

@@ -42,8 +42,8 @@ const BudgetChart = ({ data }) => {
         </Typography>
         <Box display="flex" flexDirection="column" gap={2}>
           {data.map((item, index) => {
-            const percentage = item.budgeted > 0 ? (item.spent / item.budgeted) * 100 : 0;
-            const remaining = item.budgeted - item.spent;
+            const percentage = (item.budgeted || 0) > 0 ? (item.spent / item.budgeted) * 100 : 0;
+            const remaining = (item.budgeted || 0) - item.spent;
             const isOverBudget = remaining < 0;
 
             return (

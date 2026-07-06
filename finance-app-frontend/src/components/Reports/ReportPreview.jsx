@@ -87,17 +87,17 @@ const ReportPreview = React.forwardRef(({ data, dateRange }, ref) => {
       
       <Box sx={{ mb: 4 }}>
         {data.byCategory?.map((item, index) => (
-          <Box 
-            key={index} 
-            display="flex" 
-            justifyContent="space-between" 
+          <Box
+            key={index}
+            display="flex"
+            justifyContent="space-between"
             py={1}
             borderBottom="1px solid"
             borderColor="divider"
           >
             <Typography variant="body1">{item.category}</Typography>
             <Typography variant="body1" fontWeight="medium">
-              {formatCurrency(item.amount)} ({item.percentage.toFixed(1)}%)
+              {formatCurrency(item.amount)} ({(item.percentage || 0).toFixed(1)}%)
             </Typography>
           </Box>
         ))}
@@ -111,8 +111,8 @@ const ReportPreview = React.forwardRef(({ data, dateRange }, ref) => {
       
       <Box>
         {data.budgetStatus?.map((item, index) => {
-          const percentage = item.budgeted > 0 ? (item.spent / item.budgeted) * 100 : 0;
-          const remaining = item.budgeted - item.spent;
+          const percentage = (item.budgeted || 0) > 0 ? (item.spent / item.budgeted) * 100 : 0;
+          const remaining = (item.budgeted || 0) - item.spent;
           
           return (
             <Box 

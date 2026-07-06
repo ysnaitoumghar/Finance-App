@@ -104,7 +104,7 @@ const Header = ({ onMenuClick }) => {
               cursor: 'pointer',
             }}
           >
-            {username ? username.charAt(0).toUpperCase() : 'JD'}
+            {username ? username.charAt(0).toUpperCase() : 'U'}
           </Avatar>
         </Box>
       </Toolbar>
