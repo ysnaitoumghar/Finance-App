@@ -1,10 +1,31 @@
 import React from 'react';
-import { Box, AppBar, Toolbar, InputBase, IconButton, Badge, Avatar, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { Search as SearchIcon, Notifications as NotificationsIcon, Menu as MenuIcon } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Box, AppBar, Toolbar, InputBase, IconButton, Badge, Avatar, Typography, useMediaQuery, useTheme, Menu, MenuItem } from '@mui/material';
+import { Search as SearchIcon, Notifications as NotificationsIcon, Menu as MenuIcon, Logout as LogoutIcon } from '@mui/icons-material';
+import { logout } from '../../redux/slices/authSlice';
 
 const Header = ({ onMenuClick }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { username } = useSelector((state) => state.auth);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleAvatarClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    handleMenuClose();
+    navigate('/login');
+  };
 
   return (
     <AppBar
@@ -75,6 +96,7 @@ const Header = ({ onMenuClick }) => {
           </IconButton>
           
           <Avatar
+            onClick={handleAvatarClick}
             sx={{
               width: 40,
               height: 40,
@@ -82,10 +104,29 @@ const Header = ({ onMenuClick }) => {
               cursor: 'pointer',
             }}
           >
-            JD
+            {username ? username.charAt(0).toUpperCase() : 'JD'}
           </Avatar>
         </Box>
       </Toolbar>
+      
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon sx={{ mr: 1 }} />
+          Logout
+        </MenuItem>
+      </Menu>
     </AppBar>
   );
 };

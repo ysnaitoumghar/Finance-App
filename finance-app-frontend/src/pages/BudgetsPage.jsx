@@ -55,7 +55,7 @@ const BudgetsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.categoryId || !formData.limitAmount) {
       error('Please fill all required fields');
       return;
@@ -79,6 +79,7 @@ const BudgetsPage = () => {
       handleClose();
       dispatch(fetchBudgets(userId));
     } catch (err) {
+      console.error('Budget operation error:', err);
       error(editingBudget ? 'Failed to update budget' : 'Failed to add budget');
     }
   };
@@ -93,12 +94,13 @@ const BudgetsPage = () => {
       success('Budget deleted successfully');
       dispatch(fetchBudgets(userId));
     } catch (err) {
+      console.error('Budget delete error:', err);
       error('Failed to delete budget');
     }
   };
 
   const getBudgetProgress = (budget) => {
-    const spent = expenses
+    const spent = (expenses || [])
       .filter(exp => exp.categoryId === budget.categoryId)
       .reduce((sum, exp) => sum + (exp.amount || 0), 0);
     const percentage = budget.limitAmount > 0 ? (spent / budget.limitAmount) * 100 : 0;

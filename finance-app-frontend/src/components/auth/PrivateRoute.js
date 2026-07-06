@@ -78,10 +78,10 @@ function AuthResolving() {
 }
 
 function PrivateRoute({ children }) {
-  const { isAuthenticated, loading, authChecking } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading } = useSelector((state) => state.auth);
 
-  // Covers whichever flag name your slice uses for "still resolving auth".
-  const isResolving = Boolean(authChecking ?? loading);
+  // Use loading flag to determine if auth is still resolving
+  const isResolving = loading;
 
   if (isResolving) {
     return <AuthResolving />;

@@ -63,7 +63,7 @@ const TransactionsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.description || !formData.amount || !formData.categoryId) {
       error('Please fill all required fields');
       return;
@@ -86,7 +86,7 @@ const TransactionsPage = () => {
         success('Expense added successfully');
       }
       handleClose();
-      
+
       // Refresh expenses
       const defaultRange = getDateRanges().thisMonth;
       dispatch(fetchExpenses({
@@ -95,6 +95,7 @@ const TransactionsPage = () => {
         endDate: formatDate(defaultRange.end)
       }));
     } catch (err) {
+      console.error('Expense operation error:', err);
       error(editingExpense ? 'Failed to update expense' : 'Failed to add expense');
     }
   };
@@ -107,7 +108,7 @@ const TransactionsPage = () => {
     try {
       await dispatch(deleteExpense(expenseId)).unwrap();
       success('Expense deleted successfully');
-      
+
       // Refresh expenses
       const defaultRange = getDateRanges().thisMonth;
       dispatch(fetchExpenses({
@@ -116,6 +117,7 @@ const TransactionsPage = () => {
         endDate: formatDate(defaultRange.end)
       }));
     } catch (err) {
+      console.error('Expense delete error:', err);
       error('Failed to delete expense');
     }
   };

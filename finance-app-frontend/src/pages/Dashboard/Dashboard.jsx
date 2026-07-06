@@ -36,12 +36,13 @@ const Dashboard = () => {
         success('Dashboard data loaded successfully');
       })
       .catch((err) => {
+        console.error('Dashboard load error:', err);
         error('Failed to load dashboard data');
       });
-  }, [dispatch, success, error, userId]);
+  }, [dispatch, userId]);
 
   // Calculate summary data from expenses
-  const totalExpenses = expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
+  const totalExpenses = (expenses || []).reduce((sum, exp) => sum + (exp.amount || 0), 0);
   const totalIncome = 0; // Will be implemented when income endpoint is ready
   const savings = totalIncome - totalExpenses;
   const budgetRemaining = 5000 - totalExpenses; // Placeholder budget

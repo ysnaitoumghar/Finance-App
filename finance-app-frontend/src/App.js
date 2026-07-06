@@ -10,7 +10,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Dashboard from './pages/Dashboard/Dashboard';
-`import TransactionsPage from './pages/TransactionsPage';
+import TransactionsPage from './pages/TransactionsPage';
 import BudgetsPage from './pages/BudgetsPage';
 import AnalyticsDashboard from './pages/Analytics/AnalyticsDashboard';
 import ReportsPage from './pages/Reports/ReportsPage';
