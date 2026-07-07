@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import analyticsService from '../../services/analyticsService';
+import * as analyticsService from '../../services/analyticsService';
 
 const initialState = {
   analyticsData: {

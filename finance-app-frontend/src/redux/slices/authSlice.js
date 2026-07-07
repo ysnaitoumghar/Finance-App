@@ -45,6 +45,7 @@ const authSlice = createSlice({
     userId: localStorage.getItem('userId'),
     username: localStorage.getItem('username'),
     loading: false,
+    isResolving: false,
     error: null,
     isAuthenticated: !!localStorage.getItem('token')
   },

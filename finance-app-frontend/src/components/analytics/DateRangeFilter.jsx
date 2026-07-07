@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Card, CardContent, Grid, TextField, Button, Chip, useTheme, alpha } from '@mui/material';
+import { Box, Card, CardContent, Grid, TextField, Button, Chip, Typography, useTheme, alpha } from '@mui/material';
 import { CalendarToday as CalendarIcon, Clear as ClearIcon } from '@mui/icons-material';
 import { getDateRanges, formatDate } from '../../utils/dateHelpers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
