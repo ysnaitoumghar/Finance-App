@@ -35,7 +35,7 @@ function App() {
                 ml: { md: '240px' },
                 mt: '64px',
                 p: 3,
-                backgroundColor: '#F8FAFC',
+                backgroundColor: 'transparent',
                 minHeight: 'calc(100vh - 64px)',
               }}
             >
