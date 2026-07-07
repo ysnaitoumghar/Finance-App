@@ -5,6 +5,7 @@ import { exportToPDF, exportToCSV } from '../../services/exportService';
 import { prepareSummaryCSV } from '../../services/exportService';
 import { format } from 'date-fns';
 import { useToast } from '../common/Toast';
+import { COLORS } from '../../theme';
 
 const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
   const theme = useTheme();
@@ -65,13 +66,17 @@ const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
         onClick={handlePDFExport}
         disabled={exporting !== null}
         sx={{
-          bgcolor: theme.palette.error.main,
+          bgcolor: COLORS.red,
           color: 'white',
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 600,
+          textTransform: 'none',
+          borderRadius: '10px',
           '&:hover': {
-            bgcolor: theme.palette.error.dark,
+            bgcolor: '#b93c40',
           },
           '&:disabled': {
-            bgcolor: alpha(theme.palette.error.main, 0.5),
+            bgcolor: alpha(COLORS.red, 0.5),
           }
         }}
       >
@@ -84,13 +89,17 @@ const ExportButtons = ({ data, reportRef, type = 'summary' }) => {
         onClick={handleCSVExport}
         disabled={exporting !== null}
         sx={{
-          bgcolor: theme.palette.success.main,
+          bgcolor: COLORS.emerald,
           color: 'white',
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 600,
+          textTransform: 'none',
+          borderRadius: '10px',
           '&:hover': {
-            bgcolor: theme.palette.success.dark,
+            bgcolor: '#1a9c6e',
           },
           '&:disabled': {
-            bgcolor: alpha(theme.palette.success.main, 0.5),
+            bgcolor: alpha(COLORS.emerald, 0.5),
           }
         }}
       >

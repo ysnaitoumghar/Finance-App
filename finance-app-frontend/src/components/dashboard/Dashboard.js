@@ -5,6 +5,7 @@ import ExpenseForm from '../expenses/ExpenseForm';
 import ExpenseList from '../expenses/ExpenseList';
 import Analytics from '../analytics/Analytics';
 import { Box, Grid, Typography, Paper } from '@mui/material';
+import { COLORS } from '../../theme';
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -33,13 +34,16 @@ function Dashboard() {
   };
 
   if (!userId) {
-    return <Typography>Please login to view dashboard</Typography>;
+    return <Typography sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>Please login to view dashboard</Typography>;
   }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: COLORS.text, mb: 1 }}>
         Dashboard
+      </Typography>
+      <Typography variant="body2" sx={{ color: COLORS.textDim, fontFamily: 'Inter, sans-serif', mb: 4 }}>
+        Track your expenses and analytics
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>

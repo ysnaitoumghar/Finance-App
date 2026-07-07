@@ -1,25 +1,26 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { COLORS as THEME_COLORS } from '../../theme';
+
+const CHART_COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
 
 function Analytics({ analytics }) {
-  const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
-
   const chartData = Object.entries(analytics?.byCategory || {}).map(([category, amount]) => ({
     name: category,
     value: parseFloat(amount) || 0
   }));
 
   return (
-    <Paper elevation={3} sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
+    <Paper sx={{ p: 3, bgcolor: THEME_COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${THEME_COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
+      <Typography variant="h6" sx={{ fontFamily: 'Fraunces, serif', fontWeight: 600, color: THEME_COLORS.text, mb: 2 }}>
         Expense Analytics
       </Typography>
       <Box sx={{ mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography variant="subtitle1" sx={{ color: THEME_COLORS.textDim, fontFamily: 'Inter, sans-serif', mb: 0.5 }}>
           Total Expenses
         </Typography>
-        <Typography variant="h4" color="primary">
+        <Typography variant="h4" sx={{ color: THEME_COLORS.gold, fontFamily: 'JetBrains Mono, monospace', fontWeight: 700 }}>
           ₹{parseFloat(analytics?.totalExpense || 0).toFixed(2)}
         </Typography>
       </Box>
@@ -38,7 +39,7 @@ function Analytics({ analytics }) {
               dataKey="value"
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
               ))}
             </Pie>
             <Tooltip formatter={(value) => `₹${value.toFixed(2)}`} />
@@ -46,7 +47,7 @@ function Analytics({ analytics }) {
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <Typography variant="body1" align="center" sx={{ mt: 2 }}>
+        <Typography variant="body1" sx={{ color: THEME_COLORS.textDim, fontFamily: 'Inter, sans-serif', textAlign: 'center', mt: 2 }}>
           No expense data available
         </Typography>
       )}
