@@ -9,6 +9,7 @@ import {
   ArrowDownward as ArrowDownwardIcon
 } from '@mui/icons-material';
 import { formatCurrency } from '../../utils/currencyFormatter';
+import { COLORS } from '../../theme';
 
 const SummaryCards = ({ summary, previousSummary }) => {
   const theme = useTheme();
@@ -27,7 +28,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
       value: summary.income || 0,
       icon: <TrendingUpIcon />,
       color: 'success',
-      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      gradient: `linear-gradient(135deg, ${COLORS.emerald} 0%, #1a9c6e 100%)`,
       change: calculateChange(summary.income, previousSummary?.income)
     },
     {
@@ -35,7 +36,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
       value: summary.expenses || 0,
       icon: <TrendingDownIcon />,
       color: 'error',
-      gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+      gradient: `linear-gradient(135deg, ${COLORS.red} 0%, #b93c40 100%)`,
       change: calculateChange(summary.expenses, previousSummary?.expenses)
     },
     {
@@ -43,7 +44,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
       value: summary.savings || 0,
       icon: <SavingsIcon />,
       color: 'primary',
-      gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+      gradient: `linear-gradient(135deg, ${COLORS.gold} 0%, #b8942a 100%)`,
       change: calculateChange(summary.savings, previousSummary?.savings)
     },
     {
@@ -51,7 +52,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
       value: summary.budgetRemaining || 0,
       icon: <AccountBalanceIcon />,
       color: 'info',
-      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+      gradient: `linear-gradient(135deg, ${COLORS.amber} 0%, #a67c2e 100%)`,
       change: null
     }
   ];
@@ -67,6 +68,8 @@ const SummaryCards = ({ summary, previousSummary }) => {
               color: 'white',
               position: 'relative',
               overflow: 'hidden',
+              borderRadius: '16px',
+              boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)',
               '&::before': {
                 content: '""',
                 position: 'absolute',
@@ -98,6 +101,7 @@ const SummaryCards = ({ summary, previousSummary }) => {
                       color: 'white',
                       backdropFilter: 'blur(10px)',
                       fontWeight: 600,
+                      fontFamily: 'JetBrains Mono, monospace',
                       '& .MuiChip-icon': {
                         color: 'white'
                       }
@@ -107,14 +111,14 @@ const SummaryCards = ({ summary, previousSummary }) => {
                   />
                 )}
               </Box>
-              <Typography variant="body2" sx={{ opacity: 0.9, mb: 1, fontWeight: 500 }}>
+              <Typography variant="body2" sx={{ opacity: 0.9, mb: 1, fontWeight: 500, fontFamily: 'Inter, sans-serif' }}>
                 {card.title}
               </Typography>
-              <Typography variant="h4" fontWeight="700" sx={{ mb: 0.5 }}>
+              <Typography variant="h4" fontWeight="700" sx={{ mb: 0.5, fontFamily: 'JetBrains Mono, monospace' }}>
                 {formatCurrency(card.value)}
               </Typography>
               {card.change !== null && (
-                <Typography variant="caption" sx={{ opacity: 0.8 }}>
+                <Typography variant="caption" sx={{ opacity: 0.8, fontFamily: 'Inter, sans-serif' }}>
                   vs last month
                 </Typography>
               )}

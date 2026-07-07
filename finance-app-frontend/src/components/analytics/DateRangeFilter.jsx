@@ -4,6 +4,7 @@ import { CalendarToday as CalendarIcon, Clear as ClearIcon } from '@mui/icons-ma
 import { getDateRanges, formatDate } from '../../utils/dateHelpers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { COLORS } from '../../theme';
 
 const DateRangeFilter = ({ onApply, onQuickSelect }) => {
   const theme = useTheme();
@@ -39,7 +40,7 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
   };
 
   return (
-    <Card sx={{ mb: 3 }}>
+    <Card sx={{ mb: 3, bgcolor: COLORS.panel, backdropFilter: 'blur(20px)', border: `1px solid ${COLORS.panelBorder}`, borderRadius: '16px', boxShadow: '0 24px 60px -20px rgba(0,0,0,0.6)' }}>
       <CardContent>
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={4}>
@@ -51,8 +52,24 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
                 slotProps={{
                   textField: {
                     fullWidth: true,
-                    size: 'small'
-                  }
+                    size: 'small',
+                    sx: {
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                        bgcolor: COLORS.fieldBg,
+                        color: COLORS.text,
+                        fontFamily: 'Inter, sans-serif',
+                        '& fieldset': { borderColor: COLORS.fieldBorder },
+                        '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                        '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: COLORS.textFaint,
+                        fontFamily: 'Inter, sans-serif',
+                        '&.Mui-focused': { color: COLORS.gold },
+                      },
+                    },
+                  },
                 }}
               />
             </LocalizationProvider>
@@ -66,8 +83,24 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
                 slotProps={{
                   textField: {
                     fullWidth: true,
-                    size: 'small'
-                  }
+                    size: 'small',
+                    sx: {
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '10px',
+                        bgcolor: COLORS.fieldBg,
+                        color: COLORS.text,
+                        fontFamily: 'Inter, sans-serif',
+                        '& fieldset': { borderColor: COLORS.fieldBorder },
+                        '&:hover fieldset': { borderColor: COLORS.goldSoft },
+                        '&.Mui-focused fieldset': { borderColor: COLORS.gold, borderWidth: '1px' },
+                      },
+                      '& .MuiInputLabel-root': {
+                        color: COLORS.textFaint,
+                        fontFamily: 'Inter, sans-serif',
+                        '&.Mui-focused': { color: COLORS.gold },
+                      },
+                    },
+                  },
                 }}
               />
             </LocalizationProvider>
@@ -79,7 +112,21 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
                 onClick={handleApply}
                 disabled={!startDate || !endDate}
                 startIcon={<CalendarIcon />}
-                sx={{ flex: 1 }}
+                sx={{
+                  flex: 1,
+                  background: `linear-gradient(90deg, ${COLORS.gold}, #E8C766)`,
+                  color: '#0A0E17',
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  borderRadius: '10px',
+                  boxShadow: `0 8px 24px -8px ${COLORS.goldSoft}`,
+                  '&:hover': {
+                    background: `linear-gradient(90deg, #E8C766, ${COLORS.gold})`,
+                    transform: 'translateY(-1px)',
+                    boxShadow: `0 12px 28px -8px ${COLORS.goldSoft}`,
+                  },
+                }}
               >
                 Apply
               </Button>
@@ -87,6 +134,16 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
                 variant="outlined"
                 onClick={handleClear}
                 startIcon={<ClearIcon />}
+                sx={{
+                  color: COLORS.textDim,
+                  borderColor: COLORS.fieldBorder,
+                  fontFamily: 'Inter, sans-serif',
+                  '&:hover': {
+                    borderColor: COLORS.gold,
+                    backgroundColor: 'rgba(212, 175, 55, 0.08)',
+                    color: COLORS.gold,
+                  },
+                }}
               >
                 Clear
               </Button>
@@ -95,7 +152,7 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
         </Grid>
 
         <Box sx={{ mt: 3, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-          <Typography variant="caption" color="text.secondary" sx={{ mr: 2, alignSelf: 'center' }}>
+          <Typography variant="caption" sx={{ mr: 2, alignSelf: 'center', color: COLORS.textDim, fontFamily: 'Inter, sans-serif' }}>
             Quick Select:
           </Typography>
           {Object.values(dateRanges).map((range, index) => (
@@ -104,10 +161,11 @@ const DateRangeFilter = ({ onApply, onQuickSelect }) => {
               label={range.label}
               onClick={() => handleQuickSelect(range)}
               sx={{
-                bgcolor: alpha(theme.palette.primary.main, 0.1),
-                color: theme.palette.primary.main,
+                bgcolor: alpha(COLORS.gold, 0.1),
+                color: COLORS.gold,
+                fontFamily: 'Inter, sans-serif',
                 '&:hover': {
-                  bgcolor: alpha(theme.palette.primary.main, 0.2),
+                  bgcolor: alpha(COLORS.gold, 0.2),
                 },
                 cursor: 'pointer'
               }}
