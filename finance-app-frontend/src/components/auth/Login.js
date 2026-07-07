@@ -85,12 +85,10 @@ function Login() {
     try {
       const result = await dispatch(login({ username, password }));
 
-      if (result.payload) {
-        if (rememberMe) {
-          localStorage.setItem('rememberMe', 'true');
-        }
-        navigate('/dashboard');
+      if (result.payload && rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
       }
+      // Navigation is handled by useEffect when isAuthenticated updates
     } catch (err) {
       console.error('Login error:', err);
     }
