@@ -30,7 +30,7 @@ const ExpenseChart = ({ data }) => {
     );
   }
 
-  const chartData = data.map((item, index) => ({
+  const chartData = (data || []).map((item, index) => ({
     name: item.category,
     value: item.amount,
     percentage: item.percentage,

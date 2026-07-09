@@ -1,7 +1,7 @@
 import axiosInstance from './api';
 
 export const getSummary = (userId, startDate, endDate) => {
-  return axiosInstance.get('/analytics/summary', {
+  return axiosInstance.post('/analytics/summary', null, {
     params: { userId, startDate, endDate }
   });
 };

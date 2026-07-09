@@ -53,7 +53,9 @@ function Login() {
 
   // Redirect if already authenticated
   useEffect(() => {
+    console.log('LOGIN USEEFFECT - isAuthenticated:', isAuthenticated);
     if (isAuthenticated) {
+      console.log('NAVIGATING NOW to /dashboard');
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);

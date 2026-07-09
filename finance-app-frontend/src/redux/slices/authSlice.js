@@ -74,6 +74,12 @@ const authSlice = createSlice({
         state.userId = action.payload.userId;
         state.username = action.payload.username;
         state.isAuthenticated = true;
+        console.log('LOGIN FULFILLED - Auth state after update:', {
+          token: state.token,
+          userId: state.userId,
+          username: state.username,
+          isAuthenticated: state.isAuthenticated
+        });
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Box, Typography, Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, IconButton, CircularProgress, GlobalStyles } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { fetchExpenses, addExpense, updateExpense, deleteExpense } from '../redux/slices/expenseSlice';
+import { fetchCategories } from '../redux/slices/categorySlice';
 import { useToast } from '../components/common/Toast';
 import { formatCurrency } from '../utils/currencyFormatter';
 import { getDateRanges, formatDate } from '../utils/dateHelpers';
@@ -12,6 +13,7 @@ const TransactionsPage = () => {
   const dispatch = useDispatch();
   const { success, error } = useToast();
   const { expenses, loading } = useSelector((state) => state.expenses);
+  const { categories } = useSelector((state) => state.categories);
   const { userId } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
@@ -31,6 +33,7 @@ const TransactionsPage = () => {
         startDate: formatDate(defaultRange.start),
         endDate: formatDate(defaultRange.end)
       }));
+      dispatch(fetchCategories({ userId, type: 'EXPENSE' }));
     }
   }, [dispatch, userId]);
 
@@ -211,8 +214,8 @@ const TransactionsPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {expenses.length > 0 ? (
-                expenses.map((expense) => (
+              {(expenses || []).length > 0 ? (
+                (expenses || []).map((expense) => (
                   <TableRow
                     key={expense.id}
                     sx={{
@@ -353,11 +356,11 @@ const TransactionsPage = () => {
               }}
             >
               <MenuItem value="" sx={{ color: COLORS.text }}>Select Category</MenuItem>
-              <MenuItem value="1" sx={{ color: COLORS.text }}>Food</MenuItem>
-              <MenuItem value="2" sx={{ color: COLORS.text }}>Transport</MenuItem>
-              <MenuItem value="3" sx={{ color: COLORS.text }}>Entertainment</MenuItem>
-              <MenuItem value="4" sx={{ color: COLORS.text }}>Shopping</MenuItem>
-              <MenuItem value="5" sx={{ color: COLORS.text }}>Utilities</MenuItem>
+              {(categories || []).map((category) => (
+                <MenuItem key={category.id} value={category.id} sx={{ color: COLORS.text }}>
+                  {category.name}
+                </MenuItem>
+              ))}
             </TextField>
             <TextField
               fullWidth

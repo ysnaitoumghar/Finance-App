@@ -29,7 +29,7 @@ const TrendChart = ({ data }) => {
     );
   }
 
-  const chartData = data.map(item => ({
+  const chartData = (data || []).map(item => ({
     month: item.month,
     income: item.income || 0,
     expenses: item.expenses || 0

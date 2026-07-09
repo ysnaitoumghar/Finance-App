@@ -40,7 +40,7 @@ const Dashboard = () => {
         console.error('Dashboard load error:', err);
         error('Failed to load dashboard data');
       });
-  }, [dispatch, userId, success, error]);
+  }, [dispatch, userId]);
 
   // Calculate summary data from expenses
   const totalExpenses = (expenses || []).reduce((sum, exp) => sum + (exp.amount || 0), 0);
@@ -338,8 +338,8 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {recentTransactions.length > 0 ? (
-                    recentTransactions.map((txn, index) => (
+                  {(recentTransactions || []).length > 0 ? (
+                    (recentTransactions || []).map((txn, index) => (
                       <TableRow
                         key={txn.id || index}
                         sx={{
