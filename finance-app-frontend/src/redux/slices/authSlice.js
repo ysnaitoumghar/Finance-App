@@ -32,6 +32,7 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk(
   'auth/logout',
   async () => {
+    localStorage.setItem('manualLogout', 'true');
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('username');
@@ -84,6 +85,15 @@ const authSlice = createSlice({
         state.username = null;
         state.isAuthenticated = false;
         state.user = null;
+        localStorage.removeItem('manualLogout');
+      })
+      .addCase(logout.rejected, (state) => {
+        state.token = null;
+        state.userId = null;
+        state.username = null;
+        state.isAuthenticated = false;
+        state.user = null;
+        localStorage.removeItem('manualLogout');
       });
   }
 });

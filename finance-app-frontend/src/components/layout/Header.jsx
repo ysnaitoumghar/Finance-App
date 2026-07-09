@@ -22,8 +22,8 @@ const Header = ({ onMenuClick }) => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    await dispatch(logout());
     handleMenuClose();
     navigate('/login');
   };

@@ -24,10 +24,13 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      const isManualLogout = localStorage.getItem('manualLogout') === 'true';
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       localStorage.removeItem('username');
-      window.location.href = '/login';
+      if (!isManualLogout) {
+        window.location.href = '/login';
+      }
     } else if (error.response?.status === 403) {
       console.error('Access forbidden');
     } else if (error.response?.status === 500) {
